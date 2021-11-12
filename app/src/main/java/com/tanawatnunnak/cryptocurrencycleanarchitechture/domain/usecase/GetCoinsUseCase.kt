@@ -1,7 +1,7 @@
 package com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.usecase
 
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.Resource
-import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.remote.dto.toCoin
+import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model.toCoin
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.model.Coin
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.repository.CoinRepository
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 
-class GetCoinsUseCase(private val repository: CoinRepository) :
+class GetCoinsUseCase (private val repository: CoinRepository) :
     UseCase<Nothing, Flow<Resource<List<Coin>>>>() {
 
     override fun invoke(param: Nothing?): Flow<Resource<List<Coin>>> {

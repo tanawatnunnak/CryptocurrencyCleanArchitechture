@@ -1,4 +1,4 @@
-package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.remote.dto
+package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model
 
 
 import com.google.gson.annotations.SerializedName
@@ -61,7 +61,7 @@ fun CoinDetailDto.toCoinDetail(): CoinDetail {
         symbol,
         rank,
         isActive,
-        tags.map { it.name },
+        tags,
         team
     )
 }

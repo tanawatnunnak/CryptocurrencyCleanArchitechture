@@ -1,4 +1,4 @@
-package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.remote.dto
+package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model
 
 
 import com.google.gson.annotations.SerializedName

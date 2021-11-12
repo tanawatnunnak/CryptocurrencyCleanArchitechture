@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CryptocurrencyCleanAchitechture</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="coin_active">active</string>
+    <string name="coin_welcome">Welcome to Crypto Currency</string>
+    <string name="coin_detail_tag">Tag</string>
+    <string name="coin_detail_team">Team</string>
 </resources>

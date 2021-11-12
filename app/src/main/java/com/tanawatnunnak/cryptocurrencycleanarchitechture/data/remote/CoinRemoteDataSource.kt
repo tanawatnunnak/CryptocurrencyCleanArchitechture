@@ -1,16 +1,15 @@
-package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.repository
+package com.tanawatnunnak.cryptocurrencycleanarchitechture.data.remote
 
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model.CoinDetailDto
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model.CoinDto
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.CoinDataSource
-import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.repository.CoinRepository
 
-class CoinRepositoryImp(private val remoteDataSource: CoinDataSource) : CoinRepository {
+class CoinRemoteDataSourceImp(private val apiService: CoinApi): CoinDataSource {
     override suspend fun getCoins(): List<CoinDto> {
-        return remoteDataSource.getCoins()
+        return apiService.getCoins()
     }
 
     override suspend fun getCoinDetail(coinId: String): CoinDetailDto {
-        return remoteDataSource.getCoinDetail(coinId)
+        return apiService.getCoinDetail(coinId)
     }
 }
