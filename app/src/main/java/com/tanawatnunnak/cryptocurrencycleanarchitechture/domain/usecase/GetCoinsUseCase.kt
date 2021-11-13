@@ -4,25 +4,24 @@ import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.Resource
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model.toCoin
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.model.Coin
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.repository.CoinRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
-import java.io.IOException
+import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.usecase.base.SingleUseCase
+import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.usecase.base.UseCaseScheduler
+import io.reactivex.rxjava3.core.Single
 
-class GetCoinsUseCase (private val repository: CoinRepository) :
-    UseCase<Nothing, Flow<Resource<List<Coin>>>>() {
+class GetCoinsUseCase(
+    scheduler: UseCaseScheduler,
+    private val repository: CoinRepository
+) : SingleUseCase<Resource<List<Coin>>, Nothing>(scheduler) {
 
-    override fun invoke(param: Nothing?): Flow<Resource<List<Coin>>> {
-        return flow {
-            try {
-                emit(Resource.Loading())
-                val coins = repository.getCoins().map { it.toCoin() }
-                emit(Resource.Success(coins))
-            } catch (e: HttpException) {
-                emit(Resource.Error(message = e.localizedMessage))
-            } catch (e: IOException) {
-                emit(Resource.Error(message = "check Internet"))
+    override fun execute(param: Nothing?): Single<Resource<List<Coin>>> {
+        return repository.getCoins()
+            .map { response ->
+                if (response.isSuccessful && response.body() != null) {
+                    val coins = response.body()?.map { it.toCoin() }
+                    Resource.Success(data = coins)
+                } else {
+                    Resource.Error(message = response.message())
+                }
             }
-        }
     }
 }

@@ -1,7 +1,6 @@
 package com.tanawatnunnak.cryptocurrencycleanarchitechture.presentation.coin_list
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tanawatnunnak.cryptocurrencycleanachitechture.R

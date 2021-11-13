@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
@@ -19,6 +20,7 @@ val networkModule = module {
 
 private fun provideRetrofit(): Retrofit {
     return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(createLogInterceptor())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 

@@ -1,12 +1,7 @@
 package com.tanawatnunnak.cryptocurrencycleanarchitechture.presentation.coin_detail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tanawatnunnak.cryptocurrencycleanachitechture.R
 import com.tanawatnunnak.cryptocurrencycleanachitechture.databinding.FragmentCoinDetialBinding
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.BaseFragment
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.setVisibility

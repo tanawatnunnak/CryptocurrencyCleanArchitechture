@@ -1,7 +1,10 @@
 package com.tanawatnunnak.cryptocurrencycleanarchitechture.presentation.coin_detail
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import com.tanawatnunnak.cryptocurrencycleanachitechture.R
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.Constants
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.Resource
@@ -9,8 +12,6 @@ import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.getString
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.model.CoinDetail
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.usecase.GetCoinDetailUseCase
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.presentation.coin_detail.adapter.CoinDetailBaseItem
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 
 class CoinDetailViewModel(
@@ -18,10 +19,12 @@ class CoinDetailViewModel(
     private val getCoinDetailUseCase: GetCoinDetailUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(application) {
+
     private val _state = MutableLiveData<CoinDetailState>()
     val state: LiveData<CoinDetailState> = _state
 
     init {
+        _state.postValue(CoinDetailState(isLoading = true))
         savedStateHandle.get<String>(Constants.PARAM_COIN_ID)?.let { coinId ->
             getCoinDetail(coinId)
         }
@@ -29,21 +32,32 @@ class CoinDetailViewModel(
 
     fun getCoinDetail(coinId: String) {
         savedStateHandle.set(Constants.PARAM_COIN_ID, coinId)
-        getCoinDetailUseCase(coinId).onEach { result ->
+        getCoinDetailUseCase.execute(coinId).subscribe({ result ->
             when (result) {
                 is Resource.Error -> {
-                    _state.value = CoinDetailState(error = result.message ?: "An unexpected error")
-                }
-                is Resource.Loading -> {
-                    _state.value = CoinDetailState(isLoading = true)
+                    _state.postValue(
+                        _state.value?.copy(
+                            error = result.message ?: "An unexpected error"
+                        )
+                    )
                 }
                 is Resource.Success -> {
                     val coinDetailItemList = convertDetailToItem(result.data)
-                    _state.value =
-                        CoinDetailState(coinDetailItemList = coinDetailItemList, isLoading = false)
+                    _state.postValue(
+                        _state.value?.copy(
+                            coinDetailItemList = coinDetailItemList,
+                            isLoading = false
+                        )
+                    )
                 }
             }
-        }.launchIn(viewModelScope)
+        }, { error ->
+            _state.postValue(
+                _state.value?.copy(
+                    error = error.message ?: "An unexpected error"
+                )
+            )
+        })
     }
 
     private fun convertDetailToItem(detail: CoinDetail?): List<CoinDetailBaseItem> {
