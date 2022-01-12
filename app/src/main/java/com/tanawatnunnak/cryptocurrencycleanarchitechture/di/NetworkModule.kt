@@ -19,9 +19,11 @@ val networkModule = module {
 }
 
 private fun provideRetrofit(): Retrofit {
-    return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).client(createLogInterceptor())
+    return Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
+        .client(createLogInterceptor())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create()).build()
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 }
 
 private fun createLogInterceptor(): OkHttpClient {
