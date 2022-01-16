@@ -2,6 +2,7 @@ package com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.usecase
 
 
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.Resource
+import com.tanawatnunnak.cryptocurrencycleanarchitechture.common.toResource
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.data.model.toCoinDetail
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.model.CoinDetail
 import com.tanawatnunnak.cryptocurrencycleanarchitechture.domain.repository.CoinRepository
@@ -18,6 +19,8 @@ class GetCoinDetailUseCase(
     override fun execute(param: String?): Single<Resource<CoinDetail>> {
         return repository.getCoinDetail(param ?: "")
             .map { response ->
+                response.toResource {
+                    it.toCoinDetail() }
                 if (response.isSuccessful && response.body() != null) {
                     Resource.Success(response.body()?.toCoinDetail())
                 } else {
